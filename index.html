@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luanzito Silva</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4f6f8;
+}
+
+.topo-fixo {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+header {
+    background-color: #000000;
+    color: white;
+    padding: 14px;
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header button {
+    padding: 6px 12px;
+    font-size: 14px;
+    background: #f44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+header button:hover {
+    background: #d32f2f;
+}
+
+.progresso-container {
+    padding: 8px 12px 12px;
+}
+
+.progresso-texto {
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.progresso {
+    background: #ddd;
+    border-radius: 10px;
+    height: 16px;
+    overflow: hidden;
+}
+
+.progresso-barra {
+    height: 100%;
+    width: 0%;
+    background-color: #F44336;
+    transition: width 0.3s, background-color 0.3s;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    margin-top: 110px;
+}
+
+#container {
+    width: 100%;
+    max-width: 800px;
+}
+
+.questao {
+    background: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.questao button {
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    background: #f9f9f9;
+    cursor: pointer;
+    text-align: left;
+    font-size: 16px;
+}
+
+.questao button:disabled {
+    cursor: default;
+    opacity: 0.95;
+}
+
+#proxima {
+    width: 100%;
+    padding: 15px;
+    font-size: 17px;
+    border: none;
+    border-radius: 6px;
+    background-color: #0a66c2;
+    color: white;
+    cursor: pointer;
+    display: none;
+}
+
+.resultado-final {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+</style>
+</head>
+<body>
+
+<div class="topo-fixo">
+    <header>
+        LUANZITO SILVA
+        <button onclick="reiniciarSimulado()">Reiniciar Questões</button>
+    </header>
+
+    <div class="progresso-container">
+        <div class="progresso-texto" id="progressoTexto"></div>
+        <div class="progresso">
+            <div class="progresso-barra" id="barraProgresso"></div>
+        </div>
+    </div>
+</div>
+
+<main>
+    <div id="container">
+        <div id="listaQuestoes"></div>
+        <button id="proxima" onclick="proximaPagina()">Próximas questões</button>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const questoes = [
+    { pergunta: "Quantos números de três algarismos distintos podemos formar com os algarismos : 1,2,3,4,5,6,7 e 8?", alternativas: ["336", "672", "240", "1024","540"], correta: 0 },
+    { pergunta: "Num ônibus há 5 lugares. Duas pessoas entram no ônibus. De Quantas Maneiras diferentes elas podem sentar?", alternativas: ["10", "20", "30", "40", "50"], correta: 1 },
+    { pergunta: "Disponho de cinco tipos de frutas e usarei 3 para fazer uma vitamina. A quantidade de possibilidades para fazer essa vitamina é:", alternativas: ["5", "8", "10", "15","20"], correta: 2 },
+    { pergunta: "Quantas comissões de 4 elementos podemos formar com 20 alunos de uma turma?", alternativas: ["4845", "2345", "3485", "4325","4380"], correta: 0 },
+    { pergunta: "(SECOM-PA/AOCP/2018) Define-se uma proposição como sendo um sentença declarativa cujo conteúdo poderá ser considerado verdadeiro ou falso. Dessa forma, assinale a alternativa que identifica uma proposição.", alternativas: ["Feliz Aniversário!", "Que dia é hoje?", "Se Pedro levantar mais cedo, então ele chegará no horário combinado.", "Leia com mais frequência.","A idade do jogador multiplicada por R$50,00 será o valor do prêmio."], correta: 2 },
+    { pergunta: "(IDAM/IBFC/2019) Considere as afirmações sobre lógica propositiva e sua análise por meio de tabelas-verdade. Analise as afirmativas abaixo, dê valores Verdadeiro (V) ou Falso (F). <br><br> ( ) A conjunção (e, ∧) entre duas proposições P e Q, só é verdadeira se ambas forem verdadeiras. <br><br>( ) A disjunção (ou, ∨) entre duas proposições P e Q, só é verdadeira se ambas foremverdadeiras. <br><br> ( ) A disjunção (ou, v) entre a negação de duas proposições falsas é verdadeira. Assinale a alternativa que apresenta a sequência correta de cima para baixo.",alternativas: ["V,F,V", "V,V,F", "F,F,V", "F,V,V"], correta: 0 },
+    { pergunta: "Considere como verdadeira a proposição:<br><br>“Solange é loura e Mônica é morena”. Considere agora as proposições: <br><br>I. Solange não é loura ou Mônica é morena. <br><br>II. Se Solange é loura, então Mônica não é morena.<br><br>III. Se Mônica não é morena, então Solange é loura", alternativas: ["Apenas a proposição I.", "Apenas as porposições I e III.", "Apenas as proposições II e III.", "Todas as três.", "Nenhuma das respostas."], correta: 1 },
+    { pergunta: "Considere a sentença: “Se João gosta de goiaba, então gosta de abacate.” <br> Uma sentença logicamente equivalente à sentença dada é", alternativas: ["João não gosta de goiaba ou gosta de abacate.", "Se João não gosta de goiaba, então não gosta de abacate", "Se João gosta de abacate, então gosta de goiaba.", "João gosta de goiaba e não gosta de abacate.","João gosta de goiaba ou gosta de abacate."], correta: 0 },
+    { pergunta: "Uma sentença logicamente equivalente à sentença “Se Pedro é torcedor da Chapecoense, então ele nasceu em Chapecó” é:", alternativas: [" Se Pedro não é torcedor da Chapecoense, então ele não nasceu em Chapecó.", "Se Pedro nasceu em Chapecó, então ele é torcedor da Chapecoense.", "Pedro é torcedor da Chapecoense e não nasceu em Chapecó.", "Pedro não é torcedor da Chapecoense ou nasceu em Chapecó.","Pedro é torcedor da Chapecoense ou não nasceu em Chapecó."], correta: 3 },
+    { pergunta: "Um professor afirmou: “Quem acertar todas as questões de múltipla-escolha vai tirar conceito A.” Alberto é um de seus alunos.", alternativas: ["se Alberto tirou conceito A, então ele acertou todas as questões de múltipla-escolha.", "se Alberto não tirou conceito A, então ele acertou todas as questões de múltipla-escolha.", "se Alberto não tirou conceito A, então ele errou todas as questões de múltipla-escolha.", "se Alberto não tirou conceito A, então ele errou exatamente uma questão de múltipla-escolha.","se Alberto não tirou conceito A, então ele errou pelo menos uma questão de múltipla-escolha."], correta: 4 },
+    { pergunta: "Considere a sentença: “Renato viajou e não telefonou para sua mãe” <br> A negação lógica essa sentença  é: ", alternativas: ["Renato viajou e telefonou para sua mãe", "Renato não viajou e não telefonou para sua mãe.", "Renato não viajou ou telefonou para sua mãe", "Renato viajou ou não telefonou para sua mãe.","Renato não veio ou não venceu."], correta: 2 },
+    { pergunta: "Certo dia Cesar disse: “Eu vim e venci”. Sabendo que a afirmação acima não é verdadeira, é correto concluir que Cesar", alternativas: ["não veio e venceu.", "veio e não venceu.", "não veio e não venceu", "não veio ou não vence"," se veio, não venceu."], correta: 3 },
+    { pergunta: " Considere a sentença: “Se pratico esportes, então fico feliz” ,<br> A negação lógica dessa sentença é: ", alternativas: ["Se não pratico esportes, então não fico feliz.", "Se não pratico esportes, então fico feliz.", "Se pratico esportes, então não fico feliz.", "Pratico esportes e não fico feliz"," Não pratico esportes e fico feliz."], correta: 3 },
+];
+
+const questoesPorPagina = 5;
+let paginaAtual = Number(localStorage.getItem("paginaAtual")) || 0;
+let totalRespondidas = Number(localStorage.getItem("totalRespondidas")) || 0;
+let acertos = Number(localStorage.getItem("acertos")) || 0;
+
+function salvarEstado() {
+    localStorage.setItem("paginaAtual", paginaAtual);
+    localStorage.setItem("totalRespondidas", totalRespondidas);
+    localStorage.setItem("acertos", acertos);
+}
+
+function atualizarProgresso() {
+    const pct = (totalRespondidas / questoes.length) * 100;
+    barraProgresso.style.width = pct + "%";
+
+    if (pct < 50) barraProgresso.style.backgroundColor = "#F44336";
+    else if (pct < 70) barraProgresso.style.backgroundColor = "#FFEB3B";
+    else barraProgresso.style.backgroundColor = "#4CAF50";
+
+    progressoTexto.innerText = `Progresso: ${totalRespondidas} / ${questoes.length}`;
+}
+
+function carregarQuestoes() {
+    listaQuestoes.innerHTML = "";
+    proxima.style.display = "none";
+
+    const inicio = paginaAtual * questoesPorPagina;
+    const fim = inicio + questoesPorPagina;
+
+    questoes.slice(inicio, fim).forEach((q, index) => {
+        const div = document.createElement("div");
+        div.className = "questao";
+
+        div.innerHTML = `
+            <h3>Questão ${inicio + index + 1}</h3>
+            <p>${q.pergunta}</p>
+            ${q.alternativas.map((alt, i) => `
+                <button onclick="responder(${i}, ${q.correta}, this)">
+                    ${alt}
+                </button>
+            `).join("")}
+        `;
+
+        listaQuestoes.appendChild(div);
+    });
+}
+
+function responder(escolhida, correta, botao) {
+    botao.parentNode.querySelectorAll("button").forEach(b => b.disabled = true);
+
+    if (escolhida === correta) {
+        botao.style.background = "#c8f7c5";
+        acertos++;
+    } else {
+        botao.style.background = "#f7c5c5";
+    }
+
+    totalRespondidas++;
+    salvarEstado();
+    atualizarProgresso();
+
+    const questoesNaPagina = listaQuestoes.querySelectorAll(".questao");
+    const respondidasNaPagina = Array.from(questoesNaPagina).filter(q => 
+        Array.from(q.querySelectorAll("button")).every(b => b.disabled)
+    ).length;
+
+    if (respondidasNaPagina === questoesNaPagina.length) {
+        proxima.style.display = "block";
+    }
+}
+
+function proximaPagina() {
+    paginaAtual++;
+    salvarEstado();
+
+    if (paginaAtual * questoesPorPagina < questoes.length) {
+        carregarQuestoes();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        mostrarResultadoFinal();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+function reiniciarSimulado() {
+    if (confirm("Deseja realmente interromper o teste e voltar do início?")) {
+        localStorage.clear();
+        paginaAtual = 0;
+        totalRespondidas = 0;
+        acertos = 0;
+        atualizarProgresso();
+        carregarQuestoes();
+        proxima.style.display = "none";
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+function mostrarResultadoFinal() {
+    localStorage.clear();
+    const erros = questoes.length - acertos;
+    container.innerHTML = `
+        <div class="resultado-final">
+            <h2>Resultado Final 🎯</h2>
+            <p>Acertos: ${acertos} (${((acertos/questoes.length)*100).toFixed(1)}%)</p>
+            <p>Erros: ${erros} (${((erros/questoes.length)*100).toFixed(1)}%)</p>
+            <canvas id="graficoPizza" width="200" height="200"></canvas>
+        </div>
+    `;
+
+    const ctx = document.getElementById('graficoPizza').getContext('2d');
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Acertos', 'Erros'],
+            datasets: [{
+                data: [acertos, erros],
+                backgroundColor: ['#4CAF50', '#F44336'],
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'bottom' },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.raw || 0;
+                            const percent = ((value / questoes.length) * 100).toFixed(1);
+                            return `${label}: ${value} (${percent}%)`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Inicialização
+atualizarProgresso();
+carregarQuestoes();
+</script>
+
+</body>
+</html>
