@@ -158,20 +158,72 @@ main {
 
 <script>
 const questoes = [
-    { pergunta: "Quantos números de três algarismos distintos podemos formar com os algarismos : 1,2,3,4,5,6,7 e 8?", alternativas: ["336", "672", "240", "1024","540"], correta: 0 },
-    { pergunta: "Num ônibus há 5 lugares. Duas pessoas entram no ônibus. De Quantas Maneiras diferentes elas podem sentar?", alternativas: ["10", "20", "30", "40", "50"], correta: 1 },
-    { pergunta: "Disponho de cinco tipos de frutas e usarei 3 para fazer uma vitamina. A quantidade de possibilidades para fazer essa vitamina é:", alternativas: ["5", "8", "10", "15","20"], correta: 2 },
-    { pergunta: "Quantas comissões de 4 elementos podemos formar com 20 alunos de uma turma?", alternativas: ["4845", "2345", "3485", "4325","4380"], correta: 0 },
-    { pergunta: "(SECOM-PA/AOCP/2018) Define-se uma proposição como sendo um sentença declarativa cujo conteúdo poderá ser considerado verdadeiro ou falso. Dessa forma, assinale a alternativa que identifica uma proposição.", alternativas: ["Feliz Aniversário!", "Que dia é hoje?", "Se Pedro levantar mais cedo, então ele chegará no horário combinado.", "Leia com mais frequência.","A idade do jogador multiplicada por R$50,00 será o valor do prêmio."], correta: 2 },
-    { pergunta: "(IDAM/IBFC/2019) Considere as afirmações sobre lógica propositiva e sua análise por meio de tabelas-verdade. Analise as afirmativas abaixo, dê valores Verdadeiro (V) ou Falso (F). <br><br> ( ) A conjunção (e, ∧) entre duas proposições P e Q, só é verdadeira se ambas forem verdadeiras. <br><br>( ) A disjunção (ou, ∨) entre duas proposições P e Q, só é verdadeira se ambas foremverdadeiras. <br><br> ( ) A disjunção (ou, v) entre a negação de duas proposições falsas é verdadeira. Assinale a alternativa que apresenta a sequência correta de cima para baixo.",alternativas: ["V,F,V", "V,V,F", "F,F,V", "F,V,V"], correta: 0 },
-    { pergunta: "Considere como verdadeira a proposição:<br><br>“Solange é loura e Mônica é morena”. Considere agora as proposições: <br><br>I. Solange não é loura ou Mônica é morena. <br><br>II. Se Solange é loura, então Mônica não é morena.<br><br>III. Se Mônica não é morena, então Solange é loura", alternativas: ["Apenas a proposição I.", "Apenas as porposições I e III.", "Apenas as proposições II e III.", "Todas as três.", "Nenhuma das respostas."], correta: 1 },
-    { pergunta: "Considere a sentença: “Se João gosta de goiaba, então gosta de abacate.” <br> Uma sentença logicamente equivalente à sentença dada é", alternativas: ["João não gosta de goiaba ou gosta de abacate.", "Se João não gosta de goiaba, então não gosta de abacate", "Se João gosta de abacate, então gosta de goiaba.", "João gosta de goiaba e não gosta de abacate.","João gosta de goiaba ou gosta de abacate."], correta: 0 },
-    { pergunta: "Uma sentença logicamente equivalente à sentença “Se Pedro é torcedor da Chapecoense, então ele nasceu em Chapecó” é:", alternativas: [" Se Pedro não é torcedor da Chapecoense, então ele não nasceu em Chapecó.", "Se Pedro nasceu em Chapecó, então ele é torcedor da Chapecoense.", "Pedro é torcedor da Chapecoense e não nasceu em Chapecó.", "Pedro não é torcedor da Chapecoense ou nasceu em Chapecó.","Pedro é torcedor da Chapecoense ou não nasceu em Chapecó."], correta: 3 },
-    { pergunta: "Um professor afirmou: “Quem acertar todas as questões de múltipla-escolha vai tirar conceito A.” Alberto é um de seus alunos.", alternativas: ["se Alberto tirou conceito A, então ele acertou todas as questões de múltipla-escolha.", "se Alberto não tirou conceito A, então ele acertou todas as questões de múltipla-escolha.", "se Alberto não tirou conceito A, então ele errou todas as questões de múltipla-escolha.", "se Alberto não tirou conceito A, então ele errou exatamente uma questão de múltipla-escolha.","se Alberto não tirou conceito A, então ele errou pelo menos uma questão de múltipla-escolha."], correta: 4 },
-    { pergunta: "Considere a sentença: “Renato viajou e não telefonou para sua mãe” <br> A negação lógica essa sentença  é: ", alternativas: ["Renato viajou e telefonou para sua mãe", "Renato não viajou e não telefonou para sua mãe.", "Renato não viajou ou telefonou para sua mãe", "Renato viajou ou não telefonou para sua mãe.","Renato não veio ou não venceu."], correta: 2 },
-    { pergunta: "Certo dia Cesar disse: “Eu vim e venci”. Sabendo que a afirmação acima não é verdadeira, é correto concluir que Cesar", alternativas: ["não veio e venceu.", "veio e não venceu.", "não veio e não venceu", "não veio ou não vence"," se veio, não venceu."], correta: 3 },
-    { pergunta: " Considere a sentença: “Se pratico esportes, então fico feliz” ,<br> A negação lógica dessa sentença é: ", alternativas: ["Se não pratico esportes, então não fico feliz.", "Se não pratico esportes, então fico feliz.", "Se pratico esportes, então não fico feliz.", "Pratico esportes e não fico feliz"," Não pratico esportes e fico feliz."], correta: 3 },
-];
+  { 
+    pergunta: "Quantos números de três algarismos distintos podemos formar com os algarismos : 1,2,3,4,5,6,7 e 8?", 
+    alternativas: ["a) 336", "b) 672", "c) 240", "d) 1024","e) 540"], 
+    correta: 0 
+  },
+  { 
+    pergunta: "Num ônibus há 5 lugares. Duas pessoas entram no ônibus. De Quantas Maneiras diferentes elas podem sentar?", 
+    alternativas: ["a) 10", "b) 20", "c) 30", "d) 40", "e) 50"], 
+    correta: 1 
+  },
+  { 
+    pergunta: "Disponho de cinco tipos de frutas e usarei 3 para fazer uma vitamina. A quantidade de possibilidades para fazer essa vitamina é:", 
+    alternativas: ["a) 5", "b) 8", "c) 10", "d) 15","e) 20"], 
+    correta: 2 
+  },
+  { 
+    pergunta: "Quantas comissões de 4 elementos podemos formar com 20 alunos de uma turma?", 
+    alternativas: ["a) 4845", "b) 2345", "c) 3485", "d) 4325","e) 4380"], 
+    correta: 0 
+  },
+  { 
+    pergunta: "(SECOM-PA/AOCP/2018) Define-se uma proposição como sendo um sentença declarativa cujo conteúdo poderá ser considerado verdadeiro ou falso. Dessa forma, assinale a alternativa que identifica uma proposição.", 
+    alternativas: ["a) Feliz Aniversário!", "b) Que dia é hoje?", "c) Se Pedro levantar mais cedo, então ele chegará no horário combinado.", "d) Leia com mais frequência.","e) A idade do jogador multiplicada por R$50,00 será o valor do prêmio."], 
+    correta: 2 
+  },
+  { 
+    pergunta: "(IDAM/IBFC/2019) Considere as afirmações sobre lógica propositiva e sua análise por meio de tabelas-verdade. Analise as afirmativas abaixo, dê valores Verdadeiro (V) ou Falso (F). <br><br> ( ) A conjunção (e, ∧) entre duas proposições P e Q, só é verdadeira se ambas forem verdadeiras. <br><br>( ) A disjunção (ou, ∨) entre duas proposições P e Q, só é verdadeira se ambas foremverdadeiras. <br><br> ( ) A disjunção (ou, v) entre a negação de duas proposições falsas é verdadeira. Assinale a alternativa que apresenta a sequência correta de cima para baixo.",
+    alternativas: ["a) V,F,V", "b) V,V,F", "c) F,F,V", "d) F,V,V"], 
+    correta: 0 
+  },
+  { 
+    pergunta: "Considere como verdadeira a proposição:<br><br>“Solange é loura e Mônica é morena”. Considere agora as proposições: <br><br>I. Solange não é loura ou Mônica é morena. <br><br>II. Se Solange é loura, então Mônica não é morena.<br><br>III. Se Mônica não é morena, então Solange é loura", 
+    alternativas: ["a) Apenas a proposição I.", "b) Apenas as porposições I e III.", "c) Apenas as proposições II e III.", "d) Todas as três.", "e) Nenhuma das respostas."], 
+    correta: 1 
+  },
+  { 
+    pergunta: "Considere a sentença: “Se João gosta de goiaba, então gosta de abacate.” <br> Uma sentença logicamente equivalente à sentença dada é", 
+    alternativas: ["a) João não gosta de goiaba ou gosta de abacate.", "b) Se João não gosta de goiaba, então não gosta de abacate", "c) Se João gosta de abacate, então gosta de goiaba.", "d) João gosta de goiaba e não gosta de abacate.","e) João gosta de goiaba ou gosta de abacate."], 
+    correta: 0 
+  },
+  { 
+    pergunta: "Uma sentença logicamente equivalente à sentença “Se Pedro é torcedor da Chapecoense, então ele nasceu em Chapecó” é:", 
+    alternativas: ["a) Se Pedro não é torcedor da Chapecoense, então ele não nasceu em Chapecó.", "b) Se Pedro nasceu em Chapecó, então ele é torcedor da Chapecoense.", "c) Pedro é torcedor da Chapecoense e não nasceu em Chapecó.", "d) Pedro não é torcedor da Chapecoense ou nasceu em Chapecó.","e) Pedro é torcedor da Chapecoense ou não nasceu em Chapecó."], 
+    correta: 3 
+  },
+  { 
+    pergunta: "Um professor afirmou: “Quem acertar todas as questões de múltipla-escolha vai tirar conceito A.” Alberto é um de seus alunos.", 
+    alternativas: ["a) se Alberto tirou conceito A, então ele acertou todas as questões de múltipla-escolha.", "b) se Alberto não tirou conceito A, então ele acertou todas as questões de múltipla-escolha.", "c) se Alberto não tirou conceito A, então ele errou todas as questões de múltipla-escolha.", "d) se Alberto não tirou conceito A, então ele errou exatamente uma questão de múltipla-escolha.","e) se Alberto não tirou conceito A, então ele errou pelo menos uma questão de múltipla-escolha."], 
+    correta: 4 
+  },
+  { 
+    pergunta: "Considere a sentença: “Renato viajou e não telefonou para sua mãe” <br> A negação lógica essa sentença  é: ", 
+    alternativas: ["a) Renato viajou e telefonou para sua mãe", "b) Renato não viajou e não telefonou para sua mãe.", "c) Renato não viajou ou telefonou para sua mãe", "d) Renato viajou ou não telefonou para sua mãe.","e) Renato não veio ou não venceu."], 
+    correta: 2 
+  },
+  { 
+    pergunta: "Certo dia Cesar disse: “Eu vim e venci”. Sabendo que a afirmação acima não é verdadeira, é correto concluir que Cesar", 
+    alternativas: ["a) não veio e venceu.", "b) veio e não venceu.", "c) não veio e não venceu", "d) não veio ou não vence","e) se veio, não venceu."], 
+    correta: 3 
+  },
+  { 
+    pergunta: "Considere a sentença: “Se pratico esportes, então fico feliz” ,<br> A negação lógica dessa sentença é: ", 
+    alternativas: ["a) Se não pratico esportes, então não fico feliz.", "b) Se não pratico esportes, então fico feliz.", "c) Se pratico esportes, então não fico feliz.", "d) Pratico esportes e não fico feliz","e) Não pratico esportes e fico feliz."], 
+    correta: 3 
+  }
+]
 
 const questoesPorPagina = 5;
 let paginaAtual = Number(localStorage.getItem("paginaAtual")) || 0;
