@@ -28,7 +28,6 @@ header {
     color: white;
     padding: 14px;
     font-size: 20px;
-    text-align: center;
     font-weight: bold;
     display: flex;
     justify-content: space-between;
@@ -45,39 +44,11 @@ header button {
     cursor: pointer;
 }
 
-header button:hover {
-    background: #d32f2f;
-}
-
-.progresso-container {
-    padding: 8px 12px 12px;
-}
-
-.progresso-texto {
-    text-align: center;
-    font-size: 14px;
-    margin-bottom: 6px;
-}
-
-.progresso {
-    background: #ddd;
-    border-radius: 10px;
-    height: 16px;
-    overflow: hidden;
-}
-
-.progresso-barra {
-    height: 100%;
-    width: 0%;
-    background-color: #F44336;
-    transition: width 0.3s, background-color 0.3s;
-}
-
 main {
     display: flex;
     justify-content: center;
     padding: 20px;
-    margin-top: 110px;
+    margin-top: 160px;
 }
 
 #container {
@@ -85,7 +56,7 @@ main {
     max-width: 800px;
 }
 
-.questao {
+.filtro-box, .questao, .resultado-final {
     background: white;
     padding: 20px;
     margin-bottom: 20px;
@@ -95,19 +66,13 @@ main {
 
 .questao button {
     width: 100%;
-    padding: 14px;
-    margin: 10px 0;
+    padding: 12px;
+    margin: 8px 0;
     border-radius: 6px;
     border: 1px solid #ddd;
     background: #f9f9f9;
     cursor: pointer;
     text-align: left;
-    font-size: 16px;
-}
-
-.questao button:disabled {
-    cursor: default;
-    opacity: 0.95;
 }
 
 #proxima {
@@ -122,250 +87,305 @@ main {
     display: none;
 }
 
-.resultado-final {
-    background: white;
-    padding: 25px;
-    border-radius: 8px;
-    text-align: center;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+.progresso-container {
+    padding: 10px;
+}
+
+.progresso {
+    background: #ddd;
+    border-radius: 10px;
+    height: 16px;
+    overflow: hidden;
+}
+
+.progresso-barra {
+    height: 100%;
+    width: 0%;
+    background-color: #F44336;
+    transition: 0.3s;
 }
 </style>
 </head>
 <body>
 
 <div class="topo-fixo">
-    <header>
-        LUANZITO SILVA
-        <button onclick="reiniciarSimulado()">Reiniciar Questões</button>
-    </header>
+<header>
+LUANZITO SILVA
+<button onclick="reiniciarSimulado()">Reiniciar</button>
+</header>
 
-    <div class="progresso-container">
-        <div class="progresso-texto" id="progressoTexto"></div>
-        <div class="progresso">
-            <div class="progresso-barra" id="barraProgresso"></div>
-        </div>
-    </div>
+<div class="progresso-container">
+<div id="progressoTexto"></div>
+<div class="progresso">
+<div class="progresso-barra" id="barraProgresso"></div>
+</div>
+</div>
 </div>
 
 <main>
-    <div id="container">
-        <div id="listaQuestoes"></div>
-        <button id="proxima" onclick="proximaPagina()">Próximas questões</button>
-    </div>
+<div id="container">
+
+<div class="filtro-box">
+<input type="text" id="buscaTexto" placeholder="Buscar palavra-chave..."
+style="width:100%; padding:10px; margin-bottom:10px;">
+
+<select id="filtroAssunto" style="width:100%; padding:10px;">
+<option value="todos">Todos os assuntos</option>
+</select>
+
+<button onclick="aplicarFiltro()" style="margin-top:10px; width:100%; padding:10px;">
+Aplicar Filtro
+</button>
+</div>
+
+<div id="listaQuestoes"></div>
+<button id="proxima" onclick="proximaPagina()">Próximas questões</button>
+
+</div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
 const questoes = [
-  { 
-    pergunta: "Quantos números de três algarismos distintos podemos formar com os algarismos : 1,2,3,4,5,6,7 e 8?", 
-    alternativas: ["a) 336", "b) 672", "c) 240", "d) 1024","e) 540"], 
-    correta: 0 
-  },
-  { 
-    pergunta: "Num ônibus há 5 lugares. Duas pessoas entram no ônibus. De Quantas Maneiras diferentes elas podem sentar?", 
-    alternativas: ["a) 10", "b) 20", "c) 30", "d) 40", "e) 50"], 
-    correta: 1 
-  },
-  { 
-    pergunta: "Disponho de cinco tipos de frutas e usarei 3 para fazer uma vitamina. A quantidade de possibilidades para fazer essa vitamina é:", 
-    alternativas: ["a) 5", "b) 8", "c) 10", "d) 15","e) 20"], 
-    correta: 2 
-  },
-  { 
-    pergunta: "Quantas comissões de 4 elementos podemos formar com 20 alunos de uma turma?", 
-    alternativas: ["a) 4845", "b) 2345", "c) 3485", "d) 4325","e) 4380"], 
-    correta: 0 
-  },
-  { 
-    pergunta: "(SECOM-PA/AOCP/2018) Define-se uma proposição como sendo um sentença declarativa cujo conteúdo poderá ser considerado verdadeiro ou falso. Dessa forma, assinale a alternativa que identifica uma proposição.", 
-    alternativas: ["a) Feliz Aniversário!", "b) Que dia é hoje?", "c) Se Pedro levantar mais cedo, então ele chegará no horário combinado.", "d) Leia com mais frequência.","e) A idade do jogador multiplicada por R$50,00 será o valor do prêmio."], 
-    correta: 2 
-  },
-  { 
-    pergunta: "(IDAM/IBFC/2019) Considere as afirmações sobre lógica propositiva e sua análise por meio de tabelas-verdade. Analise as afirmativas abaixo, dê valores Verdadeiro (V) ou Falso (F). <br><br> ( ) A conjunção (e, ∧) entre duas proposições P e Q, só é verdadeira se ambas forem verdadeiras. <br><br>( ) A disjunção (ou, ∨) entre duas proposições P e Q, só é verdadeira se ambas foremverdadeiras. <br><br> ( ) A disjunção (ou, v) entre a negação de duas proposições falsas é verdadeira. Assinale a alternativa que apresenta a sequência correta de cima para baixo.",
-    alternativas: ["a) V,F,V", "b) V,V,F", "c) F,F,V", "d) F,V,V"], 
-    correta: 0 
-  },
-  { 
-    pergunta: "Considere como verdadeira a proposição:<br><br>“Solange é loura e Mônica é morena”. Considere agora as proposições: <br><br>I. Solange não é loura ou Mônica é morena. <br><br>II. Se Solange é loura, então Mônica não é morena.<br><br>III. Se Mônica não é morena, então Solange é loura", 
-    alternativas: ["a) Apenas a proposição I.", "b) Apenas as porposições I e III.", "c) Apenas as proposições II e III.", "d) Todas as três.", "e) Nenhuma das respostas."], 
-    correta: 1 
-  },
-  { 
-    pergunta: "Considere a sentença: “Se João gosta de goiaba, então gosta de abacate.” <br> Uma sentença logicamente equivalente à sentença dada é", 
-    alternativas: ["a) João não gosta de goiaba ou gosta de abacate.", "b) Se João não gosta de goiaba, então não gosta de abacate", "c) Se João gosta de abacate, então gosta de goiaba.", "d) João gosta de goiaba e não gosta de abacate.","e) João gosta de goiaba ou gosta de abacate."], 
-    correta: 0 
-  },
-  { 
-    pergunta: "Uma sentença logicamente equivalente à sentença “Se Pedro é torcedor da Chapecoense, então ele nasceu em Chapecó” é:", 
-    alternativas: ["a) Se Pedro não é torcedor da Chapecoense, então ele não nasceu em Chapecó.", "b) Se Pedro nasceu em Chapecó, então ele é torcedor da Chapecoense.", "c) Pedro é torcedor da Chapecoense e não nasceu em Chapecó.", "d) Pedro não é torcedor da Chapecoense ou nasceu em Chapecó.","e) Pedro é torcedor da Chapecoense ou não nasceu em Chapecó."], 
-    correta: 3 
-  },
-  { 
-    pergunta: "Um professor afirmou: “Quem acertar todas as questões de múltipla-escolha vai tirar conceito A.” Alberto é um de seus alunos.", 
-    alternativas: ["a) se Alberto tirou conceito A, então ele acertou todas as questões de múltipla-escolha.", "b) se Alberto não tirou conceito A, então ele acertou todas as questões de múltipla-escolha.", "c) se Alberto não tirou conceito A, então ele errou todas as questões de múltipla-escolha.", "d) se Alberto não tirou conceito A, então ele errou exatamente uma questão de múltipla-escolha.","e) se Alberto não tirou conceito A, então ele errou pelo menos uma questão de múltipla-escolha."], 
-    correta: 4 
-  },
-  { 
-    pergunta: "Considere a sentença: “Renato viajou e não telefonou para sua mãe” <br> A negação lógica essa sentença  é: ", 
-    alternativas: ["a) Renato viajou e telefonou para sua mãe", "b) Renato não viajou e não telefonou para sua mãe.", "c) Renato não viajou ou telefonou para sua mãe", "d) Renato viajou ou não telefonou para sua mãe.","e) Renato não veio ou não venceu."], 
-    correta: 2 
-  },
-  { 
-    pergunta: "Certo dia Cesar disse: “Eu vim e venci”. Sabendo que a afirmação acima não é verdadeira, é correto concluir que Cesar", 
-    alternativas: ["a) não veio e venceu.", "b) veio e não venceu.", "c) não veio e não venceu", "d) não veio ou não vence","e) se veio, não venceu."], 
-    correta: 3 
-  },
-  { 
-    pergunta: "Considere a sentença: “Se pratico esportes, então fico feliz” ,<br> A negação lógica dessa sentença é: ", 
-    alternativas: ["a) Se não pratico esportes, então não fico feliz.", "b) Se não pratico esportes, então fico feliz.", "c) Se pratico esportes, então não fico feliz.", "d) Pratico esportes e não fico feliz","e) Não pratico esportes e fico feliz."], 
-    correta: 3 
-  }
-]
 
-const questoesPorPagina = 5;
-let paginaAtual = Number(localStorage.getItem("paginaAtual")) || 0;
-let totalRespondidas = Number(localStorage.getItem("totalRespondidas")) || 0;
-let acertos = Number(localStorage.getItem("acertos")) || 0;
+/* ================= ANÁLISE COMBINATÓRIA ================= */
 
-function salvarEstado() {
-    localStorage.setItem("paginaAtual", paginaAtual);
-    localStorage.setItem("totalRespondidas", totalRespondidas);
-    localStorage.setItem("acertos", acertos);
+{
+assunto:"Análise Combinatória",
+pergunta:"Quantos números de três algarismos distintos podemos formar com os algarismos: 1,2,3,4,5,6,7 e 8?",
+alternativas:["a) 336","b) 672","c) 240","d) 1024","e) 540"],
+correta:0
+},
+{
+assunto:"Análise Combinatória",
+pergunta:"Num ônibus há 5 lugares. Duas pessoas entram no ônibus. De quantas maneiras diferentes elas podem sentar?",
+alternativas:["a) 10","b) 20","c) 30","d) 40","e) 50"],
+correta:1
+},
+{
+assunto:"Análise Combinatória",
+pergunta:"Disponho de cinco tipos de frutas e usarei 3 para fazer uma vitamina. A quantidade de possibilidades é:",
+alternativas:["a) 5","b) 8","c) 10","d) 15","e) 20"],
+correta:2
+},
+{
+assunto:"Análise Combinatória",
+pergunta:"Quantas comissões de 4 elementos podemos formar com 20 alunos de uma turma?",
+alternativas:["a) 4845","b) 2345","c) 3485","d) 4325","e) 4380"],
+correta:0
+},
+
+/* ================= LÓGICA PROPOSICIONAL ================= */
+
+{
+assunto:"Lógica Proposicional",
+pergunta:"(SECOM-PA/AOCP/2018) Assinale a alternativa que identifica uma proposição.",
+alternativas:[
+"a) Feliz Aniversário!",
+"b) Que dia é hoje?",
+"c) Se Pedro levantar mais cedo, então ele chegará no horário combinado.",
+"d) Leia com mais frequência.",
+"e) A idade do jogador multiplicada por R$50 será o valor do prêmio."
+],
+correta:2
+},
+{
+assunto:"Lógica Proposicional",
+pergunta:"(IDAM/IBFC/2019) Sequência correta sobre conjunção e disjunção:",
+alternativas:["a) V,F,V","b) V,V,F","c) F,F,V","d) F,V,V"],
+correta:0
+},
+{
+assunto:"Equivalência Lógica",
+pergunta:"Se João gosta de goiaba, então gosta de abacate. Equivalente é:",
+alternativas:[
+"a) João não gosta de goiaba ou gosta de abacate.",
+"b) Se João não gosta de goiaba, então não gosta de abacate.",
+"c) Se João gosta de abacate, então gosta de goiaba.",
+"d) João gosta de goiaba e não gosta de abacate.",
+"e) João gosta de goiaba ou gosta de abacate."
+],
+correta:0
+},
+{
+assunto:"Equivalência Lógica",
+pergunta:"Sentença equivalente: Se Pedro é torcedor da Chapecoense, então nasceu em Chapecó.",
+alternativas:[
+"a) Se Pedro não é torcedor, então não nasceu.",
+"b) Se nasceu, então é torcedor.",
+"c) Pedro é torcedor e não nasceu.",
+"d) Pedro não é torcedor ou nasceu.",
+"e) Pedro é torcedor ou não nasceu."
+],
+correta:3
+},
+
+/* ================= NEGAÇÃO ================= */
+
+{
+assunto:"Negação",
+pergunta:"Negação de: Renato viajou e não telefonou.",
+alternativas:[
+"a) Renato viajou e telefonou.",
+"b) Renato não viajou e não telefonou.",
+"c) Renato não viajou ou telefonou.",
+"d) Renato viajou ou não telefonou.",
+"e) Renato não veio ou não venceu."
+],
+correta:2
+},
+{
+assunto:"Negação",
+pergunta:"Negação de: Se pratico esportes, então fico feliz.",
+alternativas:[
+"a) Se não pratico, então não fico feliz.",
+"b) Se não pratico, então fico feliz.",
+"c) Se pratico, então não fico feliz.",
+"d) Pratico esportes e não fico feliz.",
+"e) Não pratico e fico feliz."
+],
+correta:3
 }
 
-function atualizarProgresso() {
-    const pct = (totalRespondidas / questoes.length) * 100;
-    barraProgresso.style.width = pct + "%";
+];
 
-    if (pct < 50) barraProgresso.style.backgroundColor = "#F44336";
-    else if (pct < 70) barraProgresso.style.backgroundColor = "#FFEB3B";
-    else barraProgresso.style.backgroundColor = "#4CAF50";
+let questoesFiltradas=[...questoes];
+let paginaAtual=0;
+let totalRespondidas=0;
+let acertos=0;
+const questoesPorPagina=5;
 
-    progressoTexto.innerText = `Progresso: ${totalRespondidas} / ${questoes.length}`;
+/* ===== FUNÇÕES ===== */
+
+function carregarAssuntos(){
+const assuntos=[...new Set(questoes.map(q=>q.assunto))];
+assuntos.forEach(a=>{
+let op=document.createElement("option");
+op.value=a;
+op.textContent=a;
+filtroAssunto.appendChild(op);
+});
 }
 
-function carregarQuestoes() {
-    listaQuestoes.innerHTML = "";
-    proxima.style.display = "none";
+function aplicarFiltro(){
+const texto=buscaTexto.value.toLowerCase();
+const assunto=filtroAssunto.value;
 
-    const inicio = paginaAtual * questoesPorPagina;
-    const fim = inicio + questoesPorPagina;
+questoesFiltradas=questoes.filter(q=>{
+return (assunto==="todos"||q.assunto===assunto) &&
+q.pergunta.toLowerCase().includes(texto);
+});
 
-    questoes.slice(inicio, fim).forEach((q, index) => {
-        const div = document.createElement("div");
-        div.className = "questao";
+paginaAtual=0;
+totalRespondidas=0;
+acertos=0;
 
-        div.innerHTML = `
-            <h3>Questão ${inicio + index + 1}</h3>
-            <p>${q.pergunta}</p>
-            ${q.alternativas.map((alt, i) => `
-                <button onclick="responder(${i}, ${q.correta}, this)">
-                    ${alt}
-                </button>
-            `).join("")}
-        `;
-
-        listaQuestoes.appendChild(div);
-    });
-}
-
-function responder(escolhida, correta, botao) {
-    botao.parentNode.querySelectorAll("button").forEach(b => b.disabled = true);
-
-    if (escolhida === correta) {
-        botao.style.background = "#c8f7c5";
-        acertos++;
-    } else {
-        botao.style.background = "#f7c5c5";
-    }
-
-    totalRespondidas++;
-    salvarEstado();
-    atualizarProgresso();
-
-    const questoesNaPagina = listaQuestoes.querySelectorAll(".questao");
-    const respondidasNaPagina = Array.from(questoesNaPagina).filter(q => 
-        Array.from(q.querySelectorAll("button")).every(b => b.disabled)
-    ).length;
-
-    if (respondidasNaPagina === questoesNaPagina.length) {
-        proxima.style.display = "block";
-    }
-}
-
-function proximaPagina() {
-    paginaAtual++;
-    salvarEstado();
-
-    if (paginaAtual * questoesPorPagina < questoes.length) {
-        carregarQuestoes();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-        mostrarResultadoFinal();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-}
-
-function reiniciarSimulado() {
-    if (confirm("Deseja realmente interromper o teste e voltar do início?")) {
-        localStorage.clear();
-        paginaAtual = 0;
-        totalRespondidas = 0;
-        acertos = 0;
-        atualizarProgresso();
-        carregarQuestoes();
-        proxima.style.display = "none";
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-}
-
-function mostrarResultadoFinal() {
-    localStorage.clear();
-    const erros = questoes.length - acertos;
-    container.innerHTML = `
-        <div class="resultado-final">
-            <h2>Resultado Final 🎯</h2>
-            <p>Acertos: ${acertos} (${((acertos/questoes.length)*100).toFixed(1)}%)</p>
-            <p>Erros: ${erros} (${((erros/questoes.length)*100).toFixed(1)}%)</p>
-            <canvas id="graficoPizza" width="200" height="200"></canvas>
-        </div>
-    `;
-
-    const ctx = document.getElementById('graficoPizza').getContext('2d');
-    new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: ['Acertos', 'Erros'],
-            datasets: [{
-                data: [acertos, erros],
-                backgroundColor: ['#4CAF50', '#F44336'],
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { position: 'bottom' },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const label = context.label || '';
-                            const value = context.raw || 0;
-                            const percent = ((value / questoes.length) * 100).toFixed(1);
-                            return `${label}: ${value} (${percent}%)`;
-                        }
-                    }
-                }
-            }
-        }
-    });
-}
-
-// Inicialização
-atualizarProgresso();
 carregarQuestoes();
+atualizarProgresso();
+}
+
+function carregarQuestoes(){
+listaQuestoes.innerHTML="";
+proxima.style.display="none";
+
+const inicio=paginaAtual*questoesPorPagina;
+const fim=inicio+questoesPorPagina;
+
+questoesFiltradas.slice(inicio,fim).forEach((q,index)=>{
+const div=document.createElement("div");
+div.className="questao";
+
+div.innerHTML=`
+<h3>Questão ${inicio+index+1}</h3>
+<small><strong>Assunto:</strong> ${q.assunto}</small>
+<p>${q.pergunta}</p>
+${q.alternativas.map((alt,i)=>`
+<button onclick="responder(${i},${q.correta},this)">
+${alt}
+</button>
+`).join("")}
+`;
+
+listaQuestoes.appendChild(div);
+});
+}
+
+function responder(escolhida,correta,botao){
+botao.parentNode.querySelectorAll("button").forEach(b=>b.disabled=true);
+
+if(escolhida===correta){
+botao.style.background="#c8f7c5";
+acertos++;
+}else{
+botao.style.background="#f7c5c5";
+}
+
+totalRespondidas++;
+atualizarProgresso();
+
+const totalPagina=document.querySelectorAll(".questao").length;
+const respondidas=document.querySelectorAll(".questao button:disabled").length/
+document.querySelectorAll(".questao")[0].querySelectorAll("button").length;
+
+if(respondidas===totalPagina){
+proxima.style.display="block";
+}
+}
+
+function proximaPagina(){
+paginaAtual++;
+if(paginaAtual*questoesPorPagina<questoesFiltradas.length){
+carregarQuestoes();
+}else{
+mostrarResultadoFinal();
+}
+}
+
+function atualizarProgresso(){
+const total=questoesFiltradas.length||1;
+const pct=(totalRespondidas/total)*100;
+barraProgresso.style.width=pct+"%";
+progressoTexto.innerText=`Progresso: ${totalRespondidas} / ${questoesFiltradas.length}`;
+}
+
+function reiniciarSimulado(){
+paginaAtual=0;
+totalRespondidas=0;
+acertos=0;
+questoesFiltradas=[...questoes];
+carregarQuestoes();
+atualizarProgresso();
+}
+
+function mostrarResultadoFinal(){
+const erros=questoesFiltradas.length-acertos;
+
+container.innerHTML=`
+<div class="resultado-final">
+<h2>Resultado Final 🎯</h2>
+<p>Acertos: ${acertos}</p>
+<p>Erros: ${erros}</p>
+<canvas id="grafico"></canvas>
+</div>
+`;
+
+new Chart(document.getElementById("grafico"),{
+type:"pie",
+data:{
+labels:["Acertos","Erros"],
+datasets:[{
+data:[acertos,erros],
+backgroundColor:["#4CAF50","#F44336"]
+}]
+}
+});
+}
+
+/* Inicialização */
+carregarAssuntos();
+carregarQuestoes();
+atualizarProgresso();
 </script>
 
 </body>
