@@ -331,4 +331,57 @@ function mostrarResultadoFinal() {
     container.innerHTML = `
         <div class="resultado-final">
             <h2>Resultado Final 🎯</h2>
-            <p>Acertos: ${acertos} (${((acertos/totalRespondidas)*100).to
+            <p>Acertos: ${acertos} (${((acertos/totalRespondidas)*100).toFixed(1)}%)</p>
+            <p>Erros: ${erros}</p>
+            ${estatisticasAssunto}
+            <canvas id="graficoPizza" width="400" height="400"></canvas>
+            <button id="baixarRelatorio" onclick="baixarRelatorio()">Baixar Relatório PDF</button>
+        </div>
+    `;
+
+    const ctx = document.getElementById('graficoPizza').getContext('2d');
+    const labels = Object.keys(respostasPorAssunto);
+    const data = labels.map(a => respostasPorAssunto[a].acertos);
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: ["#4CAF50","#FFEB3B","#F44336","#2196F3","#9C27B0"]
+            }]
+        },
+        options: { responsive: true }
+    });
+}
+
+// GERAR RELATÓRIO PDF
+async function baixarRelatorio() {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF();
+    const resultadoDiv = document.querySelector(".resultado-final");
+
+    // Captura gráfico como imagem
+    const canvas = await html2canvas(resultadoDiv);
+    const imgData = canvas.toDataURL('image/png');
+
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+
+    pdf.addImage(imgData, 'PNG', 10, 10, pdfWidth-20, pdfHeight-20);
+    pdf.save('Relatorio_Questoes.pdf');
+}
+
+// FILTRO ASSUNTO
+filtroAssunto.addEventListener("input", () => {
+    paginaAtual = 0;
+    carregarQuestoes();
+    atualizarProgresso();
+});
+
+atualizarProgresso();
+carregarQuestoes();
+</script>
+
+</body>
+</html>
