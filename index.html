@@ -14,6 +14,8 @@ body {
     background-color: #f4f6f8;
 }
 
+/* ===== TOPO FIXO ===== */
+
 .topo-fixo {
     position: fixed;
     top: 0;
@@ -24,7 +26,7 @@ body {
 }
 
 header {
-    background-color: #000000;
+    background-color: #000;
     color: white;
     padding: 14px;
     font-size: 20px;
@@ -44,11 +46,43 @@ header button {
     cursor: pointer;
 }
 
+/* ===== PROGRESSO CENTRALIZADO ===== */
+
+.progresso-container {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.progresso-texto {
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+.progresso {
+    width: 100%;
+    max-width: 500px;
+    background: #ddd;
+    border-radius: 10px;
+    height: 16px;
+    overflow: hidden;
+}
+
+.progresso-barra {
+    height: 100%;
+    width: 0%;
+    background-color: #F44336;
+    transition: 0.3s;
+}
+
+/* ===== CONTEÚDO ===== */
+
 main {
     display: flex;
     justify-content: center;
     padding: 20px;
-    margin-top: 160px;
+    margin-top: 170px;
 }
 
 #container {
@@ -86,24 +120,6 @@ main {
     cursor: pointer;
     display: none;
 }
-
-.progresso-container {
-    padding: 10px;
-}
-
-.progresso {
-    background: #ddd;
-    border-radius: 10px;
-    height: 16px;
-    overflow: hidden;
-}
-
-.progresso-barra {
-    height: 100%;
-    width: 0%;
-    background-color: #F44336;
-    transition: 0.3s;
-}
 </style>
 </head>
 <body>
@@ -115,7 +131,7 @@ LUANZITO SILVA
 </header>
 
 <div class="progresso-container">
-<div id="progressoTexto"></div>
+<div id="progressoTexto" class="progresso-texto"></div>
 <div class="progresso">
 <div class="progresso-barra" id="barraProgresso"></div>
 </div>
@@ -151,53 +167,40 @@ const questoes = [
 
 /* ================= ANÁLISE COMBINATÓRIA ================= */
 
-{
-assunto:"Análise Combinatória",
-pergunta:"Quantos números de três algarismos distintos podemos formar com os algarismos: 1,2,3,4,5,6,7 e 8?",
+{ assunto:"Análise Combinatória",
+pergunta:"Quantos números de três algarismos distintos podemos formar com os algarismos 1,2,3,4,5,6,7 e 8?",
 alternativas:["a) 336","b) 672","c) 240","d) 1024","e) 540"],
-correta:0
-},
-{
-assunto:"Análise Combinatória",
-pergunta:"Num ônibus há 5 lugares. Duas pessoas entram no ônibus. De quantas maneiras diferentes elas podem sentar?",
+correta:0 },
+
+{ assunto:"Análise Combinatória",
+pergunta:"Num ônibus há 5 lugares. Duas pessoas entram. De quantas maneiras podem sentar?",
 alternativas:["a) 10","b) 20","c) 30","d) 40","e) 50"],
-correta:1
-},
-{
-assunto:"Análise Combinatória",
+correta:1 },
+
+{ assunto:"Análise Combinatória",
 pergunta:"Disponho de cinco tipos de frutas e usarei 3 para fazer uma vitamina. A quantidade de possibilidades é:",
 alternativas:["a) 5","b) 8","c) 10","d) 15","e) 20"],
-correta:2
-},
-{
-assunto:"Análise Combinatória",
-pergunta:"Quantas comissões de 4 elementos podemos formar com 20 alunos de uma turma?",
+correta:2 },
+
+{ assunto:"Análise Combinatória",
+pergunta:"Quantas comissões de 4 elementos podemos formar com 20 alunos?",
 alternativas:["a) 4845","b) 2345","c) 3485","d) 4325","e) 4380"],
-correta:0
-},
+correta:0 },
 
-/* ================= LÓGICA PROPOSICIONAL ================= */
+/* ================= LÓGICA ================= */
 
-{
-assunto:"Lógica Proposicional",
-pergunta:"(SECOM-PA/AOCP/2018) Assinale a alternativa que identifica uma proposição.",
+{ assunto:"Lógica Proposicional",
+pergunta:"Assinale a alternativa que identifica uma proposição.",
 alternativas:[
 "a) Feliz Aniversário!",
 "b) Que dia é hoje?",
-"c) Se Pedro levantar mais cedo, então ele chegará no horário combinado.",
-"d) Leia com mais frequência.",
-"e) A idade do jogador multiplicada por R$50 será o valor do prêmio."
+"c) Se Pedro levantar cedo, então chegará no horário.",
+"d) Leia mais.",
+"e) A idade multiplicada por 50 será o prêmio."
 ],
-correta:2
-},
-{
-assunto:"Lógica Proposicional",
-pergunta:"(IDAM/IBFC/2019) Sequência correta sobre conjunção e disjunção:",
-alternativas:["a) V,F,V","b) V,V,F","c) F,F,V","d) F,V,V"],
-correta:0
-},
-{
-assunto:"Equivalência Lógica",
+correta:2 },
+
+{ assunto:"Equivalência Lógica",
 pergunta:"Se João gosta de goiaba, então gosta de abacate. Equivalente é:",
 alternativas:[
 "a) João não gosta de goiaba ou gosta de abacate.",
@@ -206,25 +209,9 @@ alternativas:[
 "d) João gosta de goiaba e não gosta de abacate.",
 "e) João gosta de goiaba ou gosta de abacate."
 ],
-correta:0
-},
-{
-assunto:"Equivalência Lógica",
-pergunta:"Sentença equivalente: Se Pedro é torcedor da Chapecoense, então nasceu em Chapecó.",
-alternativas:[
-"a) Se Pedro não é torcedor, então não nasceu.",
-"b) Se nasceu, então é torcedor.",
-"c) Pedro é torcedor e não nasceu.",
-"d) Pedro não é torcedor ou nasceu.",
-"e) Pedro é torcedor ou não nasceu."
-],
-correta:3
-},
+correta:0 },
 
-/* ================= NEGAÇÃO ================= */
-
-{
-assunto:"Negação",
+{ assunto:"Negação",
 pergunta:"Negação de: Renato viajou e não telefonou.",
 alternativas:[
 "a) Renato viajou e telefonou.",
@@ -233,10 +220,9 @@ alternativas:[
 "d) Renato viajou ou não telefonou.",
 "e) Renato não veio ou não venceu."
 ],
-correta:2
-},
-{
-assunto:"Negação",
+correta:2 },
+
+{ assunto:"Negação",
 pergunta:"Negação de: Se pratico esportes, então fico feliz.",
 alternativas:[
 "a) Se não pratico, então não fico feliz.",
@@ -245,8 +231,7 @@ alternativas:[
 "d) Pratico esportes e não fico feliz.",
 "e) Não pratico e fico feliz."
 ],
-correta:3
-}
+correta:3 }
 
 ];
 
@@ -337,8 +322,10 @@ function proximaPagina(){
 paginaAtual++;
 if(paginaAtual*questoesPorPagina<questoesFiltradas.length){
 carregarQuestoes();
+window.scrollTo({top:0,behavior:"smooth"});
 }else{
 mostrarResultadoFinal();
+window.scrollTo({top:0,behavior:"smooth"});
 }
 }
 
@@ -359,18 +346,22 @@ atualizarProgresso();
 }
 
 function mostrarResultadoFinal(){
-const erros=questoesFiltradas.length-acertos;
+const total=questoesFiltradas.length;
+const erros=total-acertos;
+const porcentAcertos=((acertos/total)*100).toFixed(1);
+const porcentErros=((erros/total)*100).toFixed(1);
 
 container.innerHTML=`
 <div class="resultado-final">
 <h2>Resultado Final 🎯</h2>
-<p>Acertos: ${acertos}</p>
-<p>Erros: ${erros}</p>
-<canvas id="grafico"></canvas>
+<p><strong>Total:</strong> ${total}</p>
+<p style="color:#4CAF50;"><strong>Acertos:</strong> ${acertos} (${porcentAcertos}%)</p>
+<p style="color:#F44336;"><strong>Erros:</strong> ${erros} (${porcentErros}%)</p>
+<canvas id="graficoPizza"></canvas>
 </div>
 `;
 
-new Chart(document.getElementById("grafico"),{
+new Chart(document.getElementById("graficoPizza"),{
 type:"pie",
 data:{
 labels:["Acertos","Erros"],
@@ -378,7 +369,8 @@ datasets:[{
 data:[acertos,erros],
 backgroundColor:["#4CAF50","#F44336"]
 }]
-}
+},
+options:{plugins:{legend:{position:"bottom"}}}
 });
 }
 
